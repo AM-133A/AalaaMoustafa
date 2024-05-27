@@ -1,0 +1,11 @@
+# ninja log v5
+7	996	7252959532521577	CMakeFiles/copyForwardDeclaration.dir/Employee.cpp.obj	3692dfe3ba35f7e2
+14	1015	7252959532701458	CMakeFiles/copyForwardDeclaration.dir/Department.cpp.obj	981691fb5a766aeb
+1	1063	7252959533191140	CMakeFiles/copyForwardDeclaration.dir/main.cpp.obj	fbd0a356bcc9dc4f
+1063	1280	7252959535309887	copyForwardDeclaration.exe	3e93212dd0e4db3e
+5	852	7252961597848855	CMakeFiles/copyForwardDeclaration.dir/Employee.cpp.obj	3692dfe3ba35f7e2
+853	1044	7252961599707710	copyForwardDeclaration.exe	3e93212dd0e4db3e
+5	981	7252962635475631	CMakeFiles/copyForwardDeclaration.dir/main.cpp.obj	fbd0a356bcc9dc4f
+982	1185	7252962637434427	copyForwardDeclaration.exe	3e93212dd0e4db3e
+5	861	7252962942572061	CMakeFiles/copyForwardDeclaration.dir/Department.cpp.obj	981691fb5a766aeb
+862	1046	7252962944370964	copyForwardDeclaration.exe	3e93212dd0e4db3e

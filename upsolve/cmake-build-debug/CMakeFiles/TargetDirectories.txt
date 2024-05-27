@@ -1,0 +1,3 @@
+C:/Users/MG/CLionProjects/upsolve/cmake-build-debug/CMakeFiles/upsolve.dir
+C:/Users/MG/CLionProjects/upsolve/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/MG/CLionProjects/upsolve/cmake-build-debug/CMakeFiles/rebuild_cache.dir

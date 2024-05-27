@@ -1,0 +1,3 @@
+C:/Users/MG/CLionProjects/UVA_solutions/cmake-build-debug/CMakeFiles/UVA_solutions.dir
+C:/Users/MG/CLionProjects/UVA_solutions/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/MG/CLionProjects/UVA_solutions/cmake-build-debug/CMakeFiles/rebuild_cache.dir
