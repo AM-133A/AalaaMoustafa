@@ -16,82 +16,44 @@
 #define oo (ll)1e+9
 using namespace std;
 ll const mod = 1e9 + 7;
-int dx[] {-1 , 1 , 0 , 0 , 1 , -1 , 1 , -1};
-int dy[8] {0 , 0 , -1 , 1 , 1 , 1 , -1 , -1};
-bool check(string s)
-{
-    /*012
-     *345
-     *678*/
-
-    ///rows
-    if((s[0] != '.' && s[0] == s[1] && s[1] == s[2]) ||
-    (s[3] != '.' && s[3] == s[4] && s[4] == s[5]) ||
-    (s[6] != '.' && s[6] == s[7] && s[7] == s[8])) return true;
-
-    //////columns
-    if((s[0] != '.' && s[0] == s[3] && s[3] == s[6]) ||
-            (s[1] != '.' && s[1] == s[4] && s[7] == s[4])||
-       (s[2] != '.' && s[2] == s[5] && s[5] == s[8])) return true;
-
-    //////diagonals
-    if((s[0] != '.' && s[0] == s[4] && s[4] == s[8]) ||
-       (s[2] != '.' && s[2] == s[4] && s[4] == s[6])) return true;
-
-    return false;
+//int dx[] {-1 , 1 , 0 , 0 , 1 , -1 , 1 , -1};
+//int dy[] {0 , 0 , -1 , 1 , 1 , 1 , -1 , -1};
+int dx[] = { 1, 1, -1, -1, 2, 2, -2, -2 };
+int dy[] = { 2, -2, 2, -2, 1, -1, 1, -1 };
+map<pair<int, int>, vector<pair<int, int>>> adjList;
+bool isValid(int r, int c) {
+    return (r >= 0 & c >= 0 && r < 8 && c < 8);
 }
-bool complete(string s)
-{
-    lp(i, 0, 8)
-    {
-        if(s[i] == '.')
-            return false;
+int BFSPath(int sr, int sc, int dr, int dc) {
+    queue<pair<int, int>> q;
+    map<pair<int, int>, int>vis;
+    q.push(make_pair(sr, sc));
+    int dep = 0, sz = 1;
+    pair<int, int>cur = q.front();
+    for ( ; !q.empty();	++dep, sz = (int)q.size()) {//1
+        while(sz--){
+            cur = q.front(), q.pop();
+            vis[cur]++;
+            for(auto & pos:adjList[cur]) if (!vis[pos])
+            {
+                q.push(pos);
+                if(pos.first == dr && pos.second == dc)	// we found target no need to continue
+                    return dep + 1;
+            }
+        }
     }
-    return true;
+    return dep + 1;
 }
 void solve()
 {
-    string board, curr;
-    while (cin >> board && board != "end") {
-        int turn = 1;
-        bool ans = false, winning = false;
-        curr = ".........";
-        queue<pair<string, bool>> q;
-        q.push(make_pair(curr, turn));//1 means X's turn
-        while (!q.empty()){
-            curr = q.front().first;
-            turn = q.front().second;
-            q.pop();
-            if(curr == board){
-                if(check(board))
-                    winning = true;
-                ans = true;
-                break;
-            }
-            if (check(curr)) continue;//no more
-            lp(i, 0, 8) {
-                if (curr[i] == '.') {
-                    curr[i] = turn ? 'X' : 'O';
-                    if (board[i] == curr[i])
-                        q.push(make_pair(curr, (1 ^ turn)));
-                    curr[i] = '.';
-                }
-            }
-        }
-        if(ans)
-        {
-            if(winning)
-                cout << "valid\n";
-            else
-            {
-                if(complete(board))
-                    cout << "valid\n";
-                else
-                    cout << "invalid\n";
-            }
-        }
+    string s, d;
+    while(cin >> s >> d){
+    //cin >> s >> d;
+        if (s == d)
+            cout << "To get from " << s << " to " << d << " takes " << 0 << " knight moves.\n";
         else
-            cout << "invalid\n";
+            cout << "To get from " << s << " to " << d << " takes " <<
+                 BFSPath(s[1] - '1', s[0] - 'a', d[1] - '1', d[0] - 'a') << " knight moves.\n";
     }
 }
 int main(){
@@ -99,6 +61,21 @@ int main(){
     //freopen("Bumble.out", "w", stdout);
     FAST
     ll t = 1;
+    for(string ch = "a"; ch <= "h"; ch[0]++)
+    {
+        for(int i = 1; i <= 8; i++)
+        {
+            string node = ch[0] + to_string(i);
+            pair<int, int> p;
+            p.first = node[1] - '1',p.second = node[0] - 'a';
+            for (int k = 0; k < 8; k++){ // try all 8 moves
+                int nr = p.first + dx[k]; // new row
+                int nc = p.second + dy[k]; // new column
+                if (!isValid(nr, nc)) continue; // if out of boar
+                adjList[p].push_back(make_pair(nr, nc));
+            }
+        }
+    }
     //cin >> t;
     while(t--)
     {
