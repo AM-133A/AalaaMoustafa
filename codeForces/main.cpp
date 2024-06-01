@@ -16,44 +16,63 @@
 #define oo (ll)1e+9
 using namespace std;
 ll const mod = 1e9 + 7;
-//int dx[] {-1 , 1 , 0 , 0 , 1 , -1 , 1 , -1};
-//int dy[] {0 , 0 , -1 , 1 , 1 , 1 , -1 , -1};
-int dx[] = { 1, 1, -1, -1, 2, 2, -2, -2 };
-int dy[] = { 2, -2, 2, -2, 1, -1, 1, -1 };
-map<pair<int, int>, vector<pair<int, int>>> adjList;
-bool isValid(int r, int c) {
-    return (r >= 0 & c >= 0 && r < 8 && c < 8);
+int dx[] {-1 , 1 , 0 , 0 , 1 , -1 , 1 , -1};
+int dy[] {0 , 0 , -1 , 1 , 1 , 1 , -1 , -1};
+vector<int>jobs(501);
+vector<vector<int>>dep(501), dep2(501);
+int vis[501];
+int dfs(int task)//min completion time for "task"
+{
+    if(vis[task])
+        return 0;
+    vis[task]++;
+    int sum = jobs[task];
+    for(auto child: dep[task])
+        sum+= dfs(child);
+    return sum;
 }
-int BFSPath(int sr, int sc, int dr, int dc) {
-    queue<pair<int, int>> q;
-    map<pair<int, int>, int>vis;
-    q.push(make_pair(sr, sc));
-    int dep = 0, sz = 1;
-    pair<int, int>cur = q.front();
-    for ( ; !q.empty();	++dep, sz = (int)q.size()) {//1
-        while(sz--){
-            cur = q.front(), q.pop();
-            vis[cur]++;
-            for(auto & pos:adjList[cur]) if (!vis[pos])
-            {
-                q.push(pos);
-                if(pos.first == dr && pos.second == dc)	// we found target no need to continue
-                    return dep + 1;
-            }
-        }
-    }
-    return dep + 1;
+int dfs2(int task)//min completion time for "task"
+{
+    if(vis[task])
+        return 0;
+    vis[task]++;
+    int sum = jobs[task];
+    for(auto child: dep2[task])
+        sum+= dfs2(child);
+    return sum;
 }
 void solve()
 {
-    string s, d;
-    while(cin >> s >> d){
-    //cin >> s >> d;
-        if (s == d)
-            cout << "To get from " << s << " to " << d << " takes " << 0 << " knight moves.\n";
-        else
-            cout << "To get from " << s << " to " << d << " takes " <<
-                 BFSPath(s[1] - '1', s[0] - 'a', d[1] - '1', d[0] - 'a') << " knight moves.\n";
+    //ans = total durations (except for the given task) - sum of deq[task];
+    int v, e, x, y, q, tot = 0, ans, cnt = 1;
+    while(cin >> v >> e && v!=0)
+    {
+        tot = 0;
+        lp(i, 1, v) {
+            cin >> jobs[i];
+            tot += jobs[i];
+            dep[i].clear();
+            dep2[i].clear();
+        }
+        while (e--) {
+            cin >> x >> y;
+            dep[y].pb(x);//MIN: children are results
+            dep2[x].pb(y);//children are priors
+        }
+        cin >> q;
+        cout << "Case #" << cnt << ":\n";
+        while (q--) {
+            cin >> x;
+            clr(vis, 0);
+            //cout << "MAX: " << dfs2(x)<< '\n';
+            ans = (tot - dfs2(x) + jobs[x]);//complete all (tot - dfs2(x)) then complete x (+jobs[x])
+            clr(vis, 0);
+            //cout << "MIN: " << dfs(x) << endd;
+            ans -= dfs(x);
+            cout << ans << endd;
+        }
+        cout << endd;
+        cnt++;
     }
 }
 int main(){
@@ -61,21 +80,6 @@ int main(){
     //freopen("Bumble.out", "w", stdout);
     FAST
     ll t = 1;
-    for(string ch = "a"; ch <= "h"; ch[0]++)
-    {
-        for(int i = 1; i <= 8; i++)
-        {
-            string node = ch[0] + to_string(i);
-            pair<int, int> p;
-            p.first = node[1] - '1',p.second = node[0] - 'a';
-            for (int k = 0; k < 8; k++){ // try all 8 moves
-                int nr = p.first + dx[k]; // new row
-                int nc = p.second + dy[k]; // new column
-                if (!isValid(nr, nc)) continue; // if out of boar
-                adjList[p].push_back(make_pair(nr, nc));
-            }
-        }
-    }
     //cin >> t;
     while(t--)
     {
